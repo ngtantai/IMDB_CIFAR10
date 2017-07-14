@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!doctype html&gt;</p>
+<p class="p1">&lt;meta charset="utf-8"&gt;</p>
+<p class="p1">&lt;script src="http://distill.pub/template.v1.js"&gt;&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script type="text/front-matter"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>title: "Article Title"</p>
+<p class="p1"><span class="Apple-converted-space">  </span>authors:</p>
+<p class="p1"><span class="Apple-converted-space">  </span>- Rafael Baca: http://colah.github.io</p>
+<p class="p1"><span class="Apple-converted-space">  </span>- Tai Nguyen: http://shancarter.com</p>
+<p class="p1"><span class="Apple-converted-space">  </span>affiliations:</p>
+<p class="p1"><span class="Apple-converted-space">  </span>- GalvanizeU graduate student</p>
+<p class="p1"><span class="Apple-converted-space">  </span>- GalvanizeU graduate student</p>
+<p class="p1"><span class="Apple-converted-space">  </span>description: "Description of the post"</p>
+<p class="p2"><span class="Apple-converted-space">  </span></p>
+<p class="p2"><span class="Apple-converted-space"> </span></p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;dt-article class='.l-screen-inset'&gt;</p>
+<p class="p2"><span class="Apple-converted-space">  </span></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h2&gt;&lt;strong&gt;TITLE: &lt;/strong&gt;IMAGE &amp; TEXT DATA TRAINING METHODS FOR A MULITLAYER PERCEPTRON NEURAL NETWORK: BEST PRACTICES SHARED USING THE KERAS LIBRARY&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h3&gt;&lt;strong&gt;ABSTRACT: &lt;/strong&gt;&lt;/h3&gt;</p>
+<p class="p1">&lt;p&gt;In this paper, we provide an understanding for training a Multilayer Perceptron (MLP), a type of Neural Network (NN), with the Keras suite. This paper discusses our methodical exploration for choosing a good set of hyperparameters as a critical step for training a NN model. We determine that with good hyperparameters in hand, optimal NN learning becomes possible. With the derived MLP, a general NN model can be subsequently applied to different datasets with minimal or no model reconfiguration. This notion is specifically tested by applying our MLP to both the Keras (CIFAR10) image and (IMDB) text sentiment datasets. A sequential class model serves as the basis throughout our entire experiment.</p>
+<p class="p1">In our paper we determine that NNs most often fail to properly execute as successful supervised learning models due to improper data preprocessing. NNs requite vigilant data normalization, removal of redundant information, and outlier removal. Once the initial parameters are configured, configuring the hyperparameters is the next step. Tuning hyperparameters involves gridsearch as a means for optimization. Specifically, our general MLP model used a 10 fold cross-validation where we found accuracy to be lower by only 0.01.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p&gt;&lt;strong&gt;INTRODUCTION: &lt;/strong&gt;</p>
+<p class="p1">&lt;p&gt;A multilayer perceptron (MLP) is an artificial neural network of simple nodes</p>
+<p class="p1">called “neurons”. In 1958, Rosenblat first introduced the artificial intelligence conception of an artificial neural network with a single neuron network, called a “perceptron”. Rosenblat’s perceptron was inspired by the similar manner by which biological neurons act within an organism’s brain matter.1&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;An MLP is one example of a feedforward (artificial) neural network where data is directed by process in only one direction (i.e. not a looping cycle) from a layer of input nodes, through at least one hidden layer, and to a layer of output nodes.2 Accordingly, each neuron within an input, hidden, and output layer is connected in a one directional or “feed-forward” way. Each neuron applies an activation function (such as a sigmoid, hyperbolic tangent or softmax) to its received inputs so as to generate a corresponding feedforward output. Similar to either an electronic gate or trigger rate of a biological neuron cell, an activation function (or “transfer function”) defines the output of any given set of inputs.3 It should, however, be emphasized that neurons cannot characteristically fire at a faster rate that is inherently characteristic of such a neuron, therefore the resulting natural network must be differentiable so as to require the calculation of a backpropagation for the overall network.4&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">Backpropagation is the most popular of learning techniques where output values are compared with actual values to compute some pre-defined error function that is, in turn, fed back through the network (hence the term “backpropagation”).5 The error function results are used to iteratively adjust the weights (with each successive training cycle) between each connected neuron so that the network ultimately arrives at a “learned” target function having minimal error calculations.6&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">Weight adjustment techniques typically use a non-linear optimizer, such as a gradient descent optimization technique. In particular, the network calculates the derivative of the error function with respect to the weights to thus change the weights to decrease error - as if going downhill toward a global minimum upon the surface of an error function. Again, for this reason, it is critical that the network apply differentiable functions to ensure the application of backpropagation.7&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">Extra caution should have adhered where only very limited numbers of training samples are available to avoid network overfitting. Capturing the true statistical process of generating the data breaks down in the event of overfitting. Moreover, either “stopping” or “drop out” techniques are provided to allow the network to generalize examples, not in the training set. Further caution is commonly exercised when back-propagation algorithms are at the speed of convergence leading to the possibility of end up with an unwanted local minimum of the error function, as opposed to the global minimum. 8&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;MOTIVATION: &lt;/strong&gt;</p>
+<p class="p1">&lt;p&gt;This year, 2017, Google’s Tensorflow deep neural networks (NN) team has</p>
+<p class="p1">decided to support Keras for its core library. Keras, an open source NN library written in Python.9 As a result, Keras-Tensorflow provides users with a robust interface coupled to a machine learning library framework.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;In this paper, we hope to gain an understanding for training NNs with the Keras suite. Given the (CIFAR10) image dataset and (IMDB) text sentiment dataset we will build an accommodating MLP model.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">We will then examine whether choosing a good set of hyperparameters, may ultimately determine how well the NN will be trained. We conclude that with good hyperparameters in hand, optimal NN learning becomes possible.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">With our experimentally derived MLP NN, the same resulting model can be generally applied to different datasets with minimal or no model reconfiguration. We show this by applying our MLP to both the (CIFAR10) image and (IMDB) text sentiment datasets.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;MODEL DESCRIPTION: &lt;/strong&gt;</p>
+<p class="p1">&lt;p&gt;During preliminary construction, we begin to select a NN model by early</p>
+<p class="p1">stopping techniques given our data size requirements. Specifically, we will perform error analysis on the training data while conducting a hyperparameter search. The MLP will be subjected to regularization to prevent either overfitting or make the appropriate adjustments to the converse condition of underfitting on the data.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;We will construct our model by passing through two separate datasets, one an imaged based dataset (CIFAR10) and the other a text sentiment based dataset (IMDB). The CIFAR10 image dataset is from a collection of 60,000 natural images from 10 categories where each input image is 256x256 pixels in size.10 The IMDB text sentiment analysis dataset contains 25,000 movie reviews numerically categorized in either a positive or negative sentiment.11 These movie reviews come preprocessed so that each review is encoded as a sequence of word indexes (integers). The words in the review are indexed by overall frequency in the dataset to facilitate quick filtering operations. To perform some text analysis we will need to convert the numeric representation of either positive or negative sentiment to back text format before running some tests.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;MODEL SELECTION STRATEGY: &lt;/strong&gt;</p>
+<p class="p1">&lt;p&gt;As a general approach, a sequential neural network class model, provided by the Keras library, allows one to define all the feedforward layers of a neural network constructor.12 With the sequential class model, one must define the shape of the input for a dense type layer. Keras then requires that one define an activation function; we chose a softmax for the CIFAR10 dataset model.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;Keras optimizers are selected by passing optimizer arguments. We specifically chose “sgd” for use with the CIFAR10 dataset for the initial experimental run. The selecting model loss functions in Keras among many common examples, we chose categorical_crossentropy for a multi-class logarithmic loss.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;Thereafter, with a better understanding of validation, a cross-validation and loss a single set validation were initially chosen until a greater understanding of Cross Validation was subsequently applied to our model. As the model was intuitively simple to use, we used sequential class model as our basis throughout our entire experiment.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">We then define the shape of the input for an MLP dense type layer. Keras documentation then requires that one defines an activation function; we chose between either a sigmoid or softmax function depending on the given situation. To compile the model, we calculated the multinomial cross entropy loss at our dense MLP layer. For an optimizer, the Keras library provides the option to choose between an Adam optimizer and an SGD optimizer.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;PREPROCESSING – GENERAL NOTIONS: &lt;/strong&gt;</p>
+<p class="p1">&lt;p&gt;Neural networks most often fail to properly execute due to improper data preprocessing.13 Neural networks require data normalization, removal of redundant information, and outlier removal.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;For data removal, each perceptron contains an activation function having an active range. In practice, inputs into the neural network need to be scaled through normalization within the given active range so that the neural network can sufficiently differentiate between different input patterns.14&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">Similar to linear regression models, the effect of outliers on non-linear neural network regression models often encounters statistical problems curve fitting as a model with outliers tries to accommodate such performance. As a result, all other data for any model with outliers begins to deteriorate. So outlier removal from the training set often becomes a very important preprocessing step.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">Redundancy removal requires removing highly correlated data when two or more independent variables are being fed into the neural network. Highly correlated inputs mean that the amount of unique information presented by each variable is small, so less significant input can be removed.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;PREPROCESSING – CIFAR10 DATA (IMAGE) SET:&lt;/strong&gt;</p>
+<p class="p1">&lt;p&gt;As part of preprocessing, parameters of featurewise normalization are calculated onto the training set. To get a good estimate of model quality calculation of the normalization parameters of mean and variance is restricted to the training set.</p>
+<p class="p1">Featurewise normalization requires that each feature map in the input be normalized separately. For the neural network one normalizes the activations of the previous layer by applying a transformation that maintains the mean activation close to 0 and the activation standard deviation close to 1.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;As a further preprocessing step, the CIFAR10 image data is subjected to zca whitening to “de-correlate” given features to ultimately remove redundancy as stated above. Zca whitening transforms data so that its covariance matrix is the identity matrix so that the whitened data is closest to the original input data – in the least squares sense.15 It should be added that the preprocessing step of outlier removal was further applied.</p>
+<p class="p1">&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;PREPROCESSING - IMDB DATA (TEXT SENTIMENT) SET:&lt;/strong&gt;</p>
+<p class="p1">&lt;p&gt;As stated above, much of the IMDB data is already received as preprocessed by Keras. Specifically, using pad_sequences, Keras encodes each movie review with a sequence of word indices (integers). In particular, “pad_sequences” in Keras programmatically pads sequences with zero indices to ensure that sequences are of a uniform size as the text is spit in subsequent sequences. As a further preprocessing step to permit quick filtering queries, the Keras library programmatically indexes the given words in the dataset with respect to the most frequent use in the data. It should be added that the preprocessing step of outlier removal was further applied.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;PREPROCESSING FOR BOTH CIFAR10 &amp; IMDB:&lt;/strong&gt;</p>
+<p class="p1">&lt;p&gt;For the CIFAR10 &amp; IMDB datasets, normalization is applied to the input layer. Normalization is applied to both the test and training sets. In most supervised (feed forward) neural networks, normalization is required. As a transfer function is used to give outputs in a specific range as the calculation of error, as a difference between real and estimated value, is set at the same range.16</p>
+<p class="p1">&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;CLASS IMBALANCE:&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;Generally speaking, in supervised machine learning, class imbalance typically occurs when the (class) number 0 is around 90% and the (class) number 1 is around 10%. Learning fails with class imbalance. So there are many techniques to optimally train a classifier to avoid class imbalance.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;Some basic approaches to avoid class imbalance are as follows: 1) One Class Learning: “Denoise” the data instead of a classification algorithm where your original data has a few real points and lots of random noise. 2) Oversampling: producing artificial ones to ensure a 50%/50% proportion. 3) Under sampling: select a subsample of zeros such that its size matches a set of ones.17&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;Specifically, for the CIFAR10 image dataset, our determination of class imbalance was determined by a bar plot that showed an even class distribution for the given sample.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;VECTORIZATION STRATEGY: &lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">Vectorization Strategy refers to converting data to numeric form. Generally, vectorization is addressed in the preprocessing activity, as described above. In particular, Keras already provides the numeric conversion of each pixelated image for the CIFAR10 image dataset. Moreover, the Keras library already converted the initial IMDB movie review text to a dataset of numeric representations of sentiment as favorable/unfavorable and with corresponding numeric indices. As such, we were not as concerned with vectorization for this particular exercise.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;HYPERPARAMETER SEARCH STRATEGY:&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;Generally, a classifier model and gridsearch were applied with SKlearn provided on a Keras wrapper. The classifier model is described above that uses a sequential MLP with a dense layer having a softmax activation. As graphically shown in the VALIDATION PERFORMANCE PLOTS section, our applied softmax was determined to have the best performance for an activation function. Similarly, loss was complied using “categorical_crossentropy”.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;HYPER PARAMETER – Gridsearch with SKlearn :&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;Once the initial parameters are configured, configuring the hyperparameters is the next step. Tuning hyperparameters involves gridsearch as a means for optimization. Given SKlearn GridsearchCV function, accuracy is the score that is optimized by default.18&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;GridsearchCV will construct and evaluate a single model for a combination of parameters, using cross validation as the default evaluator. The SKlearn library will provide “best_params” that will characterize the combination of parameters that achieved the best results.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;For tuning, GridsearchCV provides a variety of optimizations, including the most widely used Stochastic Gradient Descent. While building our model, we applied a variety of optimizers to our classifier model: “ optimizer = [‘SGD’, ‘RMSprop’, ‘Adagrad’, ‘Adadelta’, ‘Adam’, Adamax’, ‘Nadam’]”.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">SKlearn can grid search-tune a number of parameters in addition to: batch size, number of epochs, training optimization, learning rate, momentum, network weight initialization, neuron activation function, dropout regularization, and number of neurons in a hidden layer. With that said, some intuition as when to apply a grid search is as follows: (1) variance with the results of cross validation indicates need for a grid search, (2) in addition to the best result, look for patterns with the entire grid; (3) parallelize your efforts with a lot of cloud core processing instances; (4) start with smaller, quicker dataset samples; (5) consider starting with coarse grids; and (6) no ‘favorites”, no “one size fits all” as your optimal configurations may not directly apply to your next project using the same model.19&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;VALIDATION PERFORMANCE PLOTS (at least 5 different settings of a different hyperparameter):&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">The below plots show training of 5 different hyperparameter settings from the Keras suite: [‘softmax’, ‘sigmoid’, ‘tanh’, ‘relu’, ‘linear’]. It turns out that softmax gets the best performance as an activation function for our experimental MLP model.&lt;/p&gt;</p>
+<p class="p1">&lt;image source&gt;&lt;/image&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;VALIDATION STRATEGY – A GENERAL INTUITION:&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt; Our first intuition was to conduct a conventional validation test as is common to basic machine learning techniques. Recall that conventional validation requires partitioning data into two sets: 70% training and 30% testing.20 Our results below initially convey this “single validation set” approach.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">Thereafter, we then came to the realization that very different datasets can be successfully applied to the same NN model. NN models typically provide for such robust flexibility.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;Specifically, this this experiment we were given two very different datasets where one is based on image data (CIFAR10) and the other (IMDB) is based on text data. Our experiment approach, thus asked: “wouldn’t it be interesting to build a GENERAL model of a neural network that, once built, can provide reliable generalizable prediction performance across these very different datasets?”&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;Given this new insight, instead of conventional validation, cross validation will better help us understand how generalized performance might vary across different datasets. An applied cross validation strategy will ensure greater confidence in the generalization performance estimate for the given neural network model.21&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">With that said, k-fold can be used as one non-exhaustive, applied method for cross validation.</p>
+<p class="p1">Another method is “a holdout-based early stopping” as validation -- but this method is not cross-validation per se as it stops training as</p>
+<p class="p1">soon as the error of a validation set is higher than last checked, say for every 5 epochs.23&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">We subsequently ran cross validation for the CIFAR and IMDB datasets. With cross- validation, we found accuracy to be lower only by 0.01. This is pretty remarkable, in that our general model of a neural network with cross validation has determined an error is only off by such a small amount with the specific model for the respective data sets where error was determined by the single validation set.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;VALIDATION &amp; MODEL STRATEGY – CIFAR10 DATA (IMAGE) SET:&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;A single set validation was initially chosen - until a greater conceptual understanding of cross validation was obtained and then subsequently applied to our present model. As discussed above, for the general MLP model with a 10 fold cross-validation, we found accuracy to be lower by 0.01.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;Specifically, a stratified k-fold cross validation was selected. Generally, stratification is a better approach, both in terms of bias and variance, when compared to standard cross validation.24 By rearranging the data, stratification ensures that each fold is a good representative of the whole.&lt;/p&gt;</p>
+<p class="p2"><span class="Apple-converted-space">  </span></p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">&lt;strong&gt;EVALUATION &amp; OPTIMZER METRICS – CIFAR10 DATA SET: 7&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;With another experimental approach now using a general model, we continued to use the sequential class model as our basis for our entire experiment. Accordingly, the shape of the input for a dense layer is then defined. Keras documentation then requires that one identify an activation function. We initially chose to apply a sigmoid to our model build. Thus, as an EVALUATION METRIC, we use accuracy, which calculates the correctly identified predictions over an entire population.&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">To compile the model, we calculated the multinomial cross entropy loss at our dense MLP layer. As an OPTMIZER, the Keras library provides the option to choose from say an Adam optimizer and a SGD optimizer. In this instance we chose, an Adam optimizer – although we used SGD earlier on in our experiment.25&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;EXAMPLE: CIFAR10 VALIDATION GRAPHS -----&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;For K-fold cross validation, K=4 in the Keras-based application. After our initial selection, the K-fold will then run additional 4 times. With each time, the training set is randomized and then bifurcated for training and validation sets.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">As shown, there is minimal change in accuracy – thus the model works well for the given training set:&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;img src=“IMDB_CIFAR10/<a href="https://github.com/ngtantai/IMDB_CIFAR10/blob/master/Picture3.png">Picture1.png</a>”&gt;&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;&lt;img src=“IMDB_CIFAR10/<a href="https://github.com/ngtantai/IMDB_CIFAR10/blob/master/Picture3.png">Picture2.png</a>”&gt;&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">&lt;strong&gt;VALIDATION &amp; MODEL STRATEGY -- IMDB DATA (TEXT SENTIMENT) SET:&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1"><span class="Apple-converted-space"> </span>A single set validation was initially chosen - until a greater conceptual understanding of cross-validation was obtained and then subsequently applied to our present model. As discussed above, for the general MLP model with a 10 fold cross-validation, we found accuracy to be lower by 0.01.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">Specifically, a stratified k-fold cross validation was selected. Generally, stratification is a better approach, both in terms of bias and variance, when compared to standard cross-validation.26 By rearranging the data, stratification ensures each fold is a good representative of the whole.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">&lt;strong&gt;EVALUATION &amp; OPTIMZER METRICS – IMDB DATA SET:&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">With another experimental approach now using a general model, we continued to use the sequential class model as our basis for our entire experiment. Accordingly, the shape of the input for a dense layer is then defined. Keras documentation then requires that one identify an activation function. We initially chose to apply a sigmoid to our model build. Thus, as an EVALUATION METRIC, we use accuracy, which calculates the correctly identified predictions over an entire population.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">To compile the model, we recognize that the IMDB data has two classes – either “love” or “hate” each movie in the experimental database. So to calculate the multinomial cross entropy loss, we set our dense MLP layer to accommodate the special case of a binomial cross entropy loss. As an OPTMIZER, in this instance we chose Adam as provided by the Keras suite. The Cross validation Scores for the 10 epochs with 375000 samples ended up reporting a decreasing loss of 0.2872 and accuracy of 0.8997.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;strong&gt;LEARNING CURVE PLOTS&lt;/strong&gt; (for best model containing loss and accuracy (training and validation) plotted over time):&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;Below are the learning curve plots implemented by the Keras library. This plot was generated early on in our analysis while we had configured a conventional validation split of a 70/30 test train sample set. As shown, for a run of 20 epochs, the overall accuracy and validation accuracies are shown as well as their corresponding losses for the same epoch on the plots at the right.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;Overall accuracy peaked near 1.0 at around epoch 18. Correspondingly, the loss reached its minimum at about epoch 18 as well. This plot confirmed our initial understanding of the model, but recognizing the need for concerted tuning further in the experiment.</p>
+<p class="p1">&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;&lt;img src=“IMDB_CIFAR10/<a href="https://github.com/ngtantai/IMDB_CIFAR10/blob/master/Picture3.png">Picture3.png</a>”&gt;&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>ERROR ANALYSIS:&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;Given the 5 plotted examples, we note the following -- Discussion of 5 run output examples:&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;(1) In terms of classification, a small number of input points will allow the system to train faster say evaluating a sample of 50000 data points (or “properties”). (2) There is a tendency to add more hidden layers to our model after the first.</p>
+<p class="p1">However, one might become badly fooled by the notion of helping the system by adding more hidden layers as accuracy decreased quickly. Our intuition thereafter was to add more data to the model to account for decreasing accuracy. (3) Lastly, we at this time uncertain about gaining an intuition of the relationship between the training samples and the number of hidden layers. A challenge exists for those who are new to building MLP NN models so as to maintain high accuracy and yet know when to stop adding more hidden layers to avoid compromising the achieved high accuracy. With greater experience gained by building NN models, this knowledge of when to stop adding hidden layers will clearly help us gain a better understanding regarding underfitting and overfitting a NN model.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;In our error analysis, we considered some key things to improve the performance of our model. First and foremost, our initial grid search hyperparameter tuning experiments lasted more than 5 hours using our non-GPU cores. Given the time constraints for the project, a GPU parallelized grid search would have been a tremendous help with respect to the workflow of our experiment.</p>
+<p class="p1">&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;From our experience in developing a NN model in this project, a general workflow to improve model performance for neural networks is as follows:27 (1.) Ask “if resulting training error is high”, in other words, does high bias mean make a bigger model (or, secondly, train longer, new model architecture). (2.) Ask “if development error high”, in other words does high variance generally mean get more data (secondly, consider regularization, new model architecture). (3.) If not, then ask “is the test set error too high”, does that mean to get more development data.</p>
+<p class="p1">&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">&lt;strong&gt;GENERALIZED PERFORMANCE- AN ACCURACY REPORTING ON HELD-OUT TEST SET&lt;/strong&gt; (A discussion on comparable accuracy achievement):&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;For the accuracy based on a held-out test, our general understanding of accuracy was changed during this exercise. In particular, we were able to tell the difference between training, test and holdout sets. Before, we had not considered performing validation on our trained model and basically split our data according to the common practice of creating 70% training / 30% testing split. Ultimately, we recognized the need to split the dataset into 50% for X_train, 25% for X_test and 25% for validation, especially so in the context of neural network models.28</p>
+<p class="p1">&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;Accordingly, a training set is used for “learning” to fit the classifier’s parameters, such as finding the optimal MLP weights in backpropagation. A validation set is for “tuning” the parameters of the MLP classifiers’ parameters, such as finding the optimal number of hidden layers.A holdout is a type of simple validation, rather than a simple or degenerate form of cross-validation. Specifically, for our experiment, the hold-out set is used to finalize estimates of the tuning parameters. After tuning, we applied the test sets is for assessing performance of the fully trained classifier, such as determining the error rate for the final MLP model of optimally derived size and actual weights.29</p>
+<p class="p1">&lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">For our experimental analysis, datapoints are bound in batch groups of 100. For the training set of 70 data points we divided out a holdout set from 33% of the original training set to get a 47:21 “train:hold-out” split. This approach continues to reserve the remaining 30 data points for each batch group as the test set (“ shown in python as “model.fit(X_train[:5], Y_train[:5]”, validation_split = 0.33) “).&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;</p>
+<p class="p1">&lt;strong&gt;CONCLUSION:&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p&gt;In conclusion, a challenge exists with maintaining high accuracy and knowing</p>
+<p class="p1">when to stop adding more hidden layers when working with neural network models, especially MLPs. Knowing when to stop adding hidden layers will thus ultimately help us gain a better understanding regarding underfitting and overfitting a NN model during a its build. In our error analysis, we considered some key things to improve the performance of our model. First and foremost, during our initial grid search, hyperparameter tuning experiments lasted more than 5 hours using non-GPU cores. Given the time constraints for the project, a GPU parallelized grid search would have been a tremendous help and will be strongly considered in our next experiment.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;br&gt;</p>
+<p class="p1">&lt;dt-appendix&gt;</p>
+<p class="p1">&lt;p&gt; REFERENCES: &lt;/p&gt;</p>
+<p class="p1">&lt;p&gt;1. https://www.hiit.fi/u/ahonkela/dippa/node41.html .&lt;br&gt;</p>
+<p class="p1">2. https://en.wikipedia.org/wiki/Feedforward_neural_network . &lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space"> </span>3. https://en.wikipedia.org/wiki/Activation_function .&lt;br&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">4. IBID.&lt;br&gt;</p>
+<p class="p1">5. Feed fwd neural network. IBID.&lt;br&gt;</p>
+<p class="p1">6. IBID.&lt;br&gt;</p>
+<p class="p1">7. IBID.&lt;br&gt;</p>
+<p class="p1">8. IBID.&lt;br&gt;</p>
+<p class="p1">9. https://en.wikipedia.org/wiki/Keras .&lt;br&gt;</p>
+<p class="p1">10. http://neon.nervanasys.com/index.html/model_zoo.html . &lt;br&gt;</p>
+<p class="p1">11. https://keras.io/datasets/<span class="Apple-converted-space"> </span></p>
+<p class="p1">12. http://machinelearningmastery.com/build-multi-layer-perceptron-neural- network-models-keras/ .&lt;br&gt;</p>
+<p class="p1">13. http://www.turingfinance.com/misconceptions-about-neural-networks/ .&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space"> </span>14. IBID.&lt;br&gt;</p>
+<p class="p1">15. https://stats.stackexchange.com/questions/117427/what-is-the-difference- between-zca-whitening-and-pca-whitening .&lt;br&gt;</p>
+<p class="p1">16. http://machinelearningmastery.com/implement-backpropagation-algorithm- scratch-python/ .&lt;br&gt;</p>
+<p class="p1">17. https://stats.stackexchange.com/questions/131255/class-imbalance-in- supervised-machine-learning .&lt;br&gt;</p>
+<p class="p1">18. http://machinelearningmastery.com/grid-search-hyperparameters-deep- learning-models-python-keras/ .&lt;br&gt;</p>
+<p class="p1">19. IBID.&lt;br&gt;</p>
+<p class="p1">20. https://en.wikipedia.org/wiki/Cross-validation_(statistics) .&lt;br&gt;</p>
+<p class="p1">21. https://datascience.stackexchange.com/questions/11115/cross-validation- when-training-neural-network .&lt;br&gt;</p>
+<p class="p1">22. IBID. (https://en.wikipedia.org/wiki/Cross-validation_(statistics) .&lt;br&gt;</p>
+<p class="p1">23. https://en.wikipedia.org/wiki/Early_stopping .&lt;br&gt;</p>
+<p class="p1">24. https://stats.stackexchange.com/questions/49540/understanding-stratified- cross-validation .&lt;br&gt;</p>
+<p class="p1">25. http://machinelearningmastery.com/regression-tutorial-keras-deep-learning- library-python/ ; see also http://machinelearningmastery.com/tutorial-first-neural- network-python-keras/ .&lt;br&gt;</p>
+<p class="p1">26. https://stats.stackexchange.com/questions/49540/understanding-stratified- cross-validation .&lt;br&gt;</p>
+<p class="p1">27. https://www.youtube.com/watch?v=F1ka6a13S9I .&lt;br&gt;</p>
+<p class="p1">28. https://stats.stackexchange.com/questions/19048/what-is-the-difference- between-test-set-and-validation-set .&lt;br&gt;</p>
+<p class="p1">29. https://stats.stackexchange.com/questions/19048/what-is-the-difference- between-test-set-and-validation-set; see also, https://stats.stackexchange.com/questions/68696/difference-between-training- test-and-holdout-set-data-mining-model-building , https://stats.stackexchange.com/questions/104713/hold-out-validation-vs-cross- validation .&lt;/p&gt;</p>
+<p class="p1">&lt;/dt-appendix&gt;</p>
+</body>
+</html>
